@@ -4,7 +4,8 @@
   "description": "API para fórum usando NodeJS, DDD e NestJS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "repository": {
     "type": "git",
