@@ -1,11 +1,7 @@
-import { randomUUID } from "node:crypto"
+import { Entity } from "../../core/entities/entity"
 
-export class Instructor {
-    public nome: string
-    public id: string
-
-    constructor(nome: string, id?: string){
-        this.nome = nome
-        this.id = id ?? randomUUID()
-    }
+interface InstructorProps {
+    name: string
+}
+export class Instructor extends Entity<InstructorProps> { //envio da tipagem para a classe pai
 }
