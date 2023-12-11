@@ -8,8 +8,8 @@ export class Entity<Props> {
         return this._id
     }
 
-    constructor(props: Props, id?: string){
-        this._id = new UniqueEntityId(id)
+    protected constructor(props: Props, id?: UniqueEntityId){
+        this._id = id ?? new UniqueEntityId(id)
         this.props = props
     }
 }
