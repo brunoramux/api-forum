@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,10 @@
   },
   "homepage": "https://github.com/brunoramux/api-forum#readme",
   "devDependencies": {
+    "@rocketseat/eslint-config": "^2.1.0",
     "@types/node": "^20.8.6",
+    "eslint": "^8.55.0",
+    "eslint-plugin-vitest-globals": "^1.4.0",
     "typescript": "^5.2.2",
     "vite-tsconfig-paths": "^4.2.2",
     "vitest": "^0.34.6"
