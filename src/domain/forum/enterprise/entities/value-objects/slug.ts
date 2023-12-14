@@ -11,7 +11,7 @@ export class Slug {
    */
 
   // método que normaliza uma string como um slug
-  static createFormText(text: string) {
+  static createFromText(text: string) {
     const slugText = text
       .normalize('NFKD')
       .toLowerCase() // minusculo

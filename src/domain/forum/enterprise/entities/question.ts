@@ -5,7 +5,7 @@ import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 import dayjs from 'dayjs'
 
-interface QuestionProps {
+export interface QuestionProps {
   title: string
   content: string
   slug: Slug
@@ -58,7 +58,7 @@ export class Question extends Entity<QuestionProps> {
 
   set title(title: string) {
     this.props.title = title
-    this.props.slug = Slug.createFormText(title)
+    this.props.slug = Slug.createFromText(title)
     this.touch()
   }
 
@@ -79,7 +79,7 @@ export class Question extends Entity<QuestionProps> {
     const question = new Question(
       {
         ...props,
-        slug: props.slug ?? Slug.createFormText(props.title),
+        slug: props.slug ?? Slug.createFromText(props.title), // caso slug nao venha nas propriedades, ele e criado atraves do metodo createFrom Text
         createdAt: new Date(),
       },
       id,
