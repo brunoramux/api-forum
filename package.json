@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/brunoramux/api-forum#readme",
   "devDependencies": {
+    "@faker-js/faker": "^8.3.1",
     "@rocketseat/eslint-config": "^2.1.0",
     "@types/node": "^20.8.6",
     "eslint": "^8.55.0",

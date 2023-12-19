@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import {
   Question,
@@ -5,15 +6,21 @@ import {
 } from '@/domain/forum/enterprise/entities/question'
 import { Slug } from '@/domain/forum/enterprise/entities/value-objects/slug'
 
-export function makeQuestion(override: Partial<QuestionProps> = {}) {
+export function makeQuestion(
+  override: Partial<QuestionProps> = {},
+  id: UniqueEntityId,
+) {
   // Partial faz com que as propriedades, caso as QuestionProps, sejam opcionais. Podemos escolher passa-las ou nao
-  const question = Question.create({
-    authorId: new UniqueEntityId(),
-    content: 'Example Question',
-    title: 'Example title',
-    slug: Slug.createFormText('Example Title'),
-    ...override, // as informacoes que forem passadas via parametro para a funcao makeQuestion serao usadas por cima das informacoes acima.
-  })
+  const question = Question.create(
+    {
+      authorId: new UniqueEntityId(),
+      content: faker.lorem.text(),
+      title: faker.lorem.sentence(),
+      slug: Slug.createFromText('Example Title'),
+      ...override, // as informacoes que forem passadas via parametro para a funcao makeQuestion serao usadas por cima das informacoes acima.
+    },
+    id,
+  )
 
   return question
 }
