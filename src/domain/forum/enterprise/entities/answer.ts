@@ -46,7 +46,7 @@ export class Answer extends Entity<AnswerProps> {
   }
 
   static create(
-    props: Optional<AnswerProps, 'createdAt'>, // Forma de tornar propriedades opcionais dentro de um tipo especifico.
+    props: Optional<AnswerProps, 'createdAt'>, // Forma de tornar propriedades opcionais dentro de um tipo especifico. Caso contrario eu seria obrigado a enviar o createdAt
     id?: UniqueEntityId,
   ) {
     const answer = new Answer(

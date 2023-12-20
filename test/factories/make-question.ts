@@ -6,6 +6,7 @@ import {
 } from '@/domain/forum/enterprise/entities/question'
 import { Slug } from '@/domain/forum/enterprise/entities/value-objects/slug'
 
+// funçao criada para auxilio da execucao dos testes
 export function makeQuestion(
   override: Partial<QuestionProps> = {},
   id?: UniqueEntityId,

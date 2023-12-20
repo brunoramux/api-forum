@@ -2,6 +2,8 @@ import { faker } from '@faker-js/faker'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { Answer, AnswerProps } from '@/domain/forum/enterprise/entities/answer'
 
+// funçao criada para auxilio da execucao dos testes
+
 export function makeAnswer(
   override: Partial<AnswerProps> = {},
   id?: UniqueEntityId,
