@@ -14,7 +14,7 @@ describe('Get Question By Slug', () => {
 
   it('It should be able to get a question by slug', async () => {
     const newQuestion = makeQuestion({
-      slug: Slug.createFormText('Example Bruno'), // setando uma das propriedades. As demais ficara padrao
+      slug: Slug.createFromText('Example Bruno'), // setando uma das propriedades. As demais ficara padrao
     })
     await inMemoryQuestionRepository.create(newQuestion)
 
