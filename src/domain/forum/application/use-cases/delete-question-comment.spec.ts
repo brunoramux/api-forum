@@ -29,7 +29,7 @@ describe('Delete Question Comment', () => {
     expect(inMemoryQuestionCommentRepository.items).toHaveLength(0)
   })
 
-  it('It should not be able to delete a question from other authors', async () => {
+  it('It should not be able to delete a question comment from other authors', async () => {
     const newQuestionComment = makeQuestionComment(
       {
         authorId: new UniqueEntityId('author-1'),
