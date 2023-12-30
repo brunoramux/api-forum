@@ -1,15 +1,19 @@
+import { Either, left, right } from '@/core/either'
 import { Question } from '../../enterprise/entities/question'
 import { AnswersRepository } from '../repositories/answer-repository'
 import { QuestionRepository } from '../repositories/question-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
+import { NotAllowedError } from './errors/not-allowed-error'
 
 interface ChooseQuestionBestAnswerUseCaseRequest {
   authorId: string
   answerId: string
 }
 
-interface ChooseQuestionBestAnswerUseCaseResponse {
-  question: Question
-}
+type ChooseQuestionBestAnswerUseCaseResponse = Either<
+  ResourceNotFoundError | NotAllowedError,
+  { question: Question }
+> // Either<L, R> onde L sao os possiveis erros e R e o retorno de sucesso
 
 export class ChooseQuestionBestAnswerUseCase {
   constructor(
@@ -24,7 +28,7 @@ export class ChooseQuestionBestAnswerUseCase {
     const answer = await this.answerRepository.findById(answerId)
 
     if (!answer) {
-      throw new Error('Answer Not Fount')
+      return left(new ResourceNotFoundError())
     }
 
     const question = await this.questionRepository.findById(
@@ -32,19 +36,17 @@ export class ChooseQuestionBestAnswerUseCase {
     )
 
     if (!question) {
-      throw new Error('Question Not Fount')
+      return left(new ResourceNotFoundError())
     }
 
     if (authorId !== question.authorId.toString()) {
-      throw new Error('Not allowed')
+      return left(new NotAllowedError())
     }
 
     question.bestAnswerId = answer.id
 
     await this.questionRepository.save(question)
 
-    return {
-      question,
-    }
+    return right({ question })
   }
 }
