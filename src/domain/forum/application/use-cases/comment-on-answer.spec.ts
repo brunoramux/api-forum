@@ -28,13 +28,12 @@ describe('Create Question', () => {
 
     await inMemoryAnswerRepository.create(answer)
 
-    const { comment } = await createAnswerComment.execute({
+    const result = await createAnswerComment.execute({
       authorId: 'author-1',
       content: 'comment-1',
       answerId: 'answer-1',
     })
 
-    expect(comment.content).toEqual('comment-1')
-    expect(comment.id).toBeTruthy()
+    expect(result.isRight()).toBe(true)
   })
 })

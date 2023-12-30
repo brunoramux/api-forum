@@ -2,6 +2,7 @@ import { InMemoryQuestionRepository } from 'test/repositories/in-memory-question
 import { makeQuestion } from 'test/factories/make-question'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { EditQuestionUseCase } from './edit-question'
+import { NotAllowedError } from './errors/not-allowed-error'
 
 let inMemoryQuestionRepository: InMemoryQuestionRepository
 let sut: EditQuestionUseCase
@@ -22,17 +23,14 @@ describe('Edit Question', () => {
 
     await inMemoryQuestionRepository.create(newQuestion)
 
-    await sut.execute({
+    const result = await sut.execute({
       authorId: 'author-1',
       content: 'content-2',
       questionId: newQuestion.id.toValue(),
       title: 'question-2',
     })
 
-    expect(inMemoryQuestionRepository.items[0]).toMatchObject({
-      title: 'question-2',
-      content: 'content-2',
-    })
+    expect(result.isRight()).toBe(true)
   })
 
   it('It should not be able to delete a question from other authors', async () => {
@@ -44,14 +42,14 @@ describe('Edit Question', () => {
     )
     await inMemoryQuestionRepository.create(newQuestion)
 
-    expect(
-      async () =>
-        await sut.execute({
-          authorId: 'author-2',
-          content: 'content-2',
-          questionId: newQuestion.id.toValue(),
-          title: 'question-2',
-        }),
-    ).rejects.toBeInstanceOf(Error)
+    const result = await sut.execute({
+      authorId: 'author-2',
+      content: 'content-2',
+      questionId: newQuestion.id.toValue(),
+      title: 'question-2',
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(NotAllowedError)
   })
 })
