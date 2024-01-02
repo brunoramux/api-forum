@@ -3,14 +3,22 @@ import { makeQuestion } from 'test/factories/make-question'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { EditQuestionUseCase } from './edit-question'
 import { NotAllowedError } from './errors/not-allowed-error'
+import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/in-memory-question-attachments-repository'
+import { makeQuestionAttachment } from 'test/factories/make-question-attachment'
 
 let inMemoryQuestionRepository: InMemoryQuestionRepository
+let inMemoryQuestionAttachmentRepository: InMemoryQuestionAttachmentsRepository
 let sut: EditQuestionUseCase
 
 describe('Edit Question', () => {
   beforeEach(async () => {
     inMemoryQuestionRepository = new InMemoryQuestionRepository()
-    sut = new EditQuestionUseCase(inMemoryQuestionRepository)
+    inMemoryQuestionAttachmentRepository =
+      new InMemoryQuestionAttachmentsRepository()
+    sut = new EditQuestionUseCase(
+      inMemoryQuestionRepository,
+      inMemoryQuestionAttachmentRepository,
+    )
   })
 
   it('It should be able to update a question', async () => {
@@ -23,14 +31,35 @@ describe('Edit Question', () => {
 
     await inMemoryQuestionRepository.create(newQuestion)
 
+    inMemoryQuestionAttachmentRepository.items.push(
+      makeQuestionAttachment({
+        questionId: newQuestion.id,
+        attachmentId: new UniqueEntityId('1'),
+      }),
+      makeQuestionAttachment({
+        questionId: newQuestion.id,
+        attachmentId: new UniqueEntityId('2'),
+      }),
+    )
+
     const result = await sut.execute({
       authorId: 'author-1',
       content: 'content-2',
       questionId: newQuestion.id.toValue(),
       title: 'question-2',
+      attachmentsIds: ['1', '3'],
     })
 
     expect(result.isRight()).toBe(true)
+    expect(
+      inMemoryQuestionRepository.items[0].attachaments.currentItems,
+    ).toHaveLength(2)
+    expect(
+      inMemoryQuestionRepository.items[0].attachaments.currentItems,
+    ).toEqual([
+      expect.objectContaining({ attachmentId: new UniqueEntityId('1') }),
+      expect.objectContaining({ attachmentId: new UniqueEntityId('3') }),
+    ])
   })
 
   it('It should not be able to delete a question from other authors', async () => {
@@ -47,6 +76,7 @@ describe('Edit Question', () => {
       content: 'content-2',
       questionId: newQuestion.id.toValue(),
       title: 'question-2',
+      attachmentsIds: ['1'],
     })
 
     expect(result.isLeft()).toBe(true)

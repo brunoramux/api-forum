@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
+import { AggregateRoot } from '@/core/entities/aggregate-root'
 import { Slug } from './value-objects/slug'
-import { Entity } from '@/core/entities/entity'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 import dayjs from 'dayjs'
+import { QuestionAttachmentList } from './question-attachment-list'
 
 export interface QuestionProps {
   title: string
@@ -13,8 +14,9 @@ export interface QuestionProps {
   bestAnswerId?: UniqueEntityId
   createdAt: Date
   updatedAt?: Date
+  attachments: QuestionAttachmentList
 }
-export class Question extends Entity<QuestionProps> {
+export class Question extends AggregateRoot<QuestionProps> {
   // envio a tipagem para a classe pai
   get title() {
     return this.props.title
@@ -42,6 +44,10 @@ export class Question extends Entity<QuestionProps> {
 
   get updatedAt() {
     return this.props.updatedAt
+  }
+
+  get attachaments() {
+    return this.props.attachments
   }
 
   get isNew(): boolean {
@@ -72,14 +78,19 @@ export class Question extends Entity<QuestionProps> {
     this.touch()
   }
 
+  set attachaments(attachament: QuestionAttachmentList) {
+    this.props.attachments = attachament
+  }
+
   static create(
-    props: Optional<QuestionProps, 'createdAt' | 'slug'>, // Forma de tornar propriedades opcionais dentro de um tipo especifico.
+    props: Optional<QuestionProps, 'createdAt' | 'slug' | 'attachments'>, // Forma de tornar propriedades opcionais dentro de um tipo especifico.
     id?: UniqueEntityId,
   ) {
     const question = new Question(
       {
         ...props,
         slug: props.slug ?? Slug.createFromText(props.title), // caso slug nao venha nas propriedades, ele e criado atraves do metodo createFrom Text
+        attachments: props.attachments ?? new QuestionAttachmentList(),
         createdAt: props.createdAt ?? new Date(),
       },
       id,
