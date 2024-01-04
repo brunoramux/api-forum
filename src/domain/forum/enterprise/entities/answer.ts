@@ -2,6 +2,7 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
+import { AnswerAttachmentList } from './answer-attachment-list'
 
 export interface AnswerProps {
   content: string
@@ -9,6 +10,7 @@ export interface AnswerProps {
   questionId: UniqueEntityId
   createdAt: Date
   updatedAt?: Date
+  attachments: AnswerAttachmentList
 }
 export class Answer extends Entity<AnswerProps> {
   // envio da tipagem para a classe pai
@@ -32,6 +34,10 @@ export class Answer extends Entity<AnswerProps> {
     return this.props.updatedAt
   }
 
+  get attachaments() {
+    return this.props.attachments
+  }
+
   get excerpt() {
     return this.content.substring(0, 120).trimEnd().concat('...')
   }
@@ -45,13 +51,18 @@ export class Answer extends Entity<AnswerProps> {
     this.touch()
   }
 
+  set attachaments(attachament: AnswerAttachmentList) {
+    this.props.attachments = attachament
+  }
+
   static create(
-    props: Optional<AnswerProps, 'createdAt'>, // Forma de tornar propriedades opcionais dentro de um tipo especifico. Caso contrario eu seria obrigado a enviar o createdAt
+    props: Optional<AnswerProps, 'createdAt' | 'attachments'>, // Forma de tornar propriedades opcionais dentro de um tipo especifico. Caso contrario eu seria obrigado a enviar o createdAt
     id?: UniqueEntityId,
   ) {
     const answer = new Answer(
       {
         ...props,
+        attachments: props.attachments ?? new AnswerAttachmentList(),
         createdAt: props.createdAt ?? new Date(),
       },
       id,
