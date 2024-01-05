@@ -2,7 +2,7 @@ import { InMemoryAnswersRepository } from 'test/repositories/in-memory-answers-r
 import { makeAnswer } from 'test/factories/make-answer'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { EditAnswerUseCase } from './edit-answer'
-import { NotAllowedError } from './errors/not-allowed-error'
+import { NotAllowedError } from '../../../../core/errors/not-allowed-error'
 import { InMemoryAnswerAttachmentsRepository } from 'test/repositories/in-memory-answer-attachments-repository'
 import { makeAnswerAttachment } from 'test/factories/make-answer-attachment'
 
@@ -50,6 +50,9 @@ describe('Edit Answer', () => {
     })
 
     expect(result.isRight()).toBe(true)
+    expect(inMemoryAnswerRepository.items[0]).toMatchObject({
+      content: 'content-2',
+    })
     expect(
       inMemoryAnswerRepository.items[0].attachaments.currentItems,
     ).toHaveLength(2)
