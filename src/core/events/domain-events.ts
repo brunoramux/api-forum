@@ -9,6 +9,7 @@ export class DomainEvents {
   private static markedAggregates: AggregateRoot<any>[] = [] // os eventos disparados serão do tipo agregados. Um agregado é setado nessa variavel mas o evento ainda não é disparado. O método dispatchAggregateEvents vai disparar o evento posteriormente (garantia que os dados foram salvos corretamente.)
 
   public static markAggregateForDispatch(aggregate: AggregateRoot<any>) {
+    // método que adiciona eventos a serem disparados.
     const aggregateFound = !!this.findMarkedAggregateByID(aggregate.id)
 
     if (!aggregateFound) {
@@ -36,10 +37,10 @@ export class DomainEvents {
   }
 
   public static dispatchEventsForAggregate(id: UniqueEntityId) {
-    const aggregate = this.findMarkedAggregateByID(id)
+    const aggregate = this.findMarkedAggregateByID(id) // procura o evento passado no ID
 
     if (aggregate) {
-      this.dispatchAggregateEvents(aggregate)
+      this.dispatchAggregateEvents(aggregate) // chama método que dispara o evento
       aggregate.clearEvents()
       this.removeAggregateFromMarkedDispatchList(aggregate)
     }
