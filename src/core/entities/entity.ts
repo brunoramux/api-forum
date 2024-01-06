@@ -12,4 +12,17 @@ export class Entity<Props> {
     this._id = id ?? new UniqueEntityId(id)
     this.props = props
   }
+
+  public equals(entity: Entity<any>) {
+    // usar  esse metodo sempre que precisarmos validar se uma entidade e igual a outra
+    if (entity === this) {
+      return true
+    }
+
+    if (entity.id === this._id) {
+      return true
+    }
+
+    return false
+  }
 }
