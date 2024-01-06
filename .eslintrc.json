@@ -5,7 +5,8 @@
     ],
     "rules": {
         "no-useless-constructor": "off",
-        "no-useless-return": "off"
+        "no-useless-return": "off",
+        "@typescript-eslint/no-explicit-any": "off"
     },
     "env": {
         "vitest-globals/env": true

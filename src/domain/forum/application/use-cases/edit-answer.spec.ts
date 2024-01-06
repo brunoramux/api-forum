@@ -12,9 +12,11 @@ let sut: EditAnswerUseCase
 
 describe('Edit Answer', () => {
   beforeEach(async () => {
-    inMemoryAnswerRepository = new InMemoryAnswersRepository()
     inMemoryAnswerAttachmentsRepository =
       new InMemoryAnswerAttachmentsRepository()
+    inMemoryAnswerRepository = new InMemoryAnswersRepository(
+      inMemoryAnswerAttachmentsRepository,
+    )
     sut = new EditAnswerUseCase(
       inMemoryAnswerRepository,
       inMemoryAnswerAttachmentsRepository,
@@ -76,7 +78,7 @@ describe('Edit Answer', () => {
     const result = await sut.execute({
       authorId: 'author-2',
       content: 'content-2',
-      answerId: newAnswer.id.toValue(),
+      answerId: newAnswer.id.toString(),
       attachmentsId: [],
     })
 
