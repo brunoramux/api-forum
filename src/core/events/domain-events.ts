@@ -13,7 +13,7 @@ export class DomainEvents {
     const aggregateFound = !!this.findMarkedAggregateByID(aggregate.id)
 
     if (!aggregateFound) {
-      this.markedAggregates.push(aggregate)
+      this.markedAggregates.push(aggregate) // adiciona apenas se ele nao for encontrado, no caso do evento ja ter sido incluido anteriormente.
     }
   }
 
@@ -23,6 +23,7 @@ export class DomainEvents {
   }
 
   private static removeAggregateFromMarkedDispatchList(
+    // remove evento apos ele ser disparado
     aggregate: AggregateRoot<any>,
   ) {
     const index = this.markedAggregates.findIndex((a) => a.equals(aggregate))
@@ -56,7 +57,7 @@ export class DomainEvents {
       this.handlersMap[eventClassName] = []
     }
 
-    this.handlersMap[eventClassName].push(callback)
+    this.handlersMap[eventClassName].push(callback) // adiciona ação ao evento
   }
 
   public static clearHandlers() {
