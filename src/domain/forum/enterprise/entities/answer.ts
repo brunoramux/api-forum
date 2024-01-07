@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
-import { Entity } from '@/core/entities/entity'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 import { AnswerAttachmentList } from './answer-attachment-list'
+import { AggregateRoot } from '@/core/entities/aggregate-root'
+import { AnswerCreatedEvent } from '../events/answer-created-event'
 
 export interface AnswerProps {
   content: string
@@ -12,7 +13,7 @@ export interface AnswerProps {
   updatedAt?: Date
   attachments: AnswerAttachmentList
 }
-export class Answer extends Entity<AnswerProps> {
+export class Answer extends AggregateRoot<AnswerProps> {
   // envio da tipagem para a classe pai
   get content() {
     return this.props.content
@@ -68,6 +69,12 @@ export class Answer extends Entity<AnswerProps> {
       id,
     )
     // tenho acesso ao construtor protected pois estou dentro da classe que extende a classe Entity
+
+    const isNewAnswer = !id
+
+    if (isNewAnswer) {
+      answer.addDomainEvent(new AnswerCreatedEvent(answer))
+    }
     return answer
   }
 }
