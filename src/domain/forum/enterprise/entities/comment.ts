@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
-import { Entity } from '@/core/entities/entity'
+import { AggregateRoot } from '@/core/entities/aggregate-root'
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 
 export interface CommentProps {
@@ -10,7 +10,7 @@ export interface CommentProps {
 }
 export abstract class Comment<
   Props extends CommentProps, // permite que possamos adicionar itens dentro da tipagem via classe pai
-> extends Entity<Props> {
+> extends AggregateRoot<Props> {
   // envio da tipagem para a classe pai
   get content() {
     return this.props.content

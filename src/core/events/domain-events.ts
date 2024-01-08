@@ -48,6 +48,7 @@ export class DomainEvents {
   }
 
   public static register(
+    // colocar evento no handlersMap
     callback: DomainEventCallback,
     eventClassName: string,
   ) {
@@ -71,7 +72,7 @@ export class DomainEvents {
   private static dispatch(event: DomainEvent) {
     const eventClassName: string = event.constructor.name
 
-    const isEventRegistered = eventClassName in this.handlersMap
+    const isEventRegistered = eventClassName in this.handlersMap // verifica se o register foi executado para aquele evento
 
     if (isEventRegistered) {
       const handlers = this.handlersMap[eventClassName]

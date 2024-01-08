@@ -2,6 +2,7 @@
 import { UniqueEntityId } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 import { Comment, CommentProps } from './comment'
+import { QuestionCommentEvent } from '../events/question-comment-event'
 
 export interface QuestionCommentProps extends CommentProps {
   questionId: UniqueEntityId
@@ -23,6 +24,7 @@ export class QuestionComment extends Comment<QuestionCommentProps> {
       id,
     )
     // tenho acesso ao construtor protected pois estou dentro da classe que extende a classe Entity
+    questionComment.addDomainEvent(new QuestionCommentEvent(questionComment))
     return questionComment
   }
 }
